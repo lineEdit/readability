@@ -153,8 +153,14 @@ public class AnaliseText {
         int countVowel = 0;
         char[] symbols = word.toLowerCase().toCharArray();
         for (int i = 0; i < symbols.length; ++i) {
-            if (isVowel(symbols[i]) && !isVowel(symbols[i + 1])) {
-                ++countVowel;
+            if (isVowel(symbols[i])) {
+                if (i + 1 < symbols.length - 1) {
+                    if (!isVowel(symbols[i + 1])) {
+                        ++countVowel;
+                    } else {
+                        ++countVowel;
+                    }
+                }
             }
         }
         if (symbols[symbols.length - 1] == 'e') {
