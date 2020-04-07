@@ -14,6 +14,7 @@ public class AnaliseText {
     private int characters;
     private int syllables;
     private int polysyllables;
+    private double average;
 
     public AnaliseText(String fileName) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -36,16 +37,59 @@ public class AnaliseText {
         characters = getCountCharacters();
         syllables = getCountSyllables();
         polysyllables = getCountPolySyllables();
+        average = (getLevel(getARI())
+                + getLevel(getFK())
+                + getLevel(getSMOG())
+                + getLevel(getCLI())) / 4.0;
     }
 
-    public void show() {
-        calc();
+    public void showText() {
         System.out.println("The text is:\n" + input + "\n");
         System.out.println("Words: " + words);
         System.out.println("Sentences: " + sentences);
         System.out.println("Characters: " + characters);
         System.out.println("Syllables: " + syllables);
         System.out.println("Polysyllables: " + polysyllables);
+    }
+
+    public void showAll() {
+        showARI();
+        showFK();
+        showSMOG();
+        showCLI();
+        showAverage();
+    }
+
+    public void showARI() {
+        double score = getARI();
+        System.out.println("Automated Readability Index: "
+                + score
+                + getLevel(score));
+    }
+
+    public void showFK() {
+        double score = getFK();
+        System.out.println("Flesch–Kincaid readability tests: "
+                + score
+                + getLevel(score));
+    }
+
+    public void showSMOG() {
+        double score = getSMOG();
+        System.out.println("Simple Measure of Gobbledygook: "
+                + score
+                + getLevel(score));
+    }
+
+    public void showCLI() {
+        double score = getCLI();
+        System.out.println("Coleman–Liau index: "
+                + score
+                + showLevel(score));
+    }
+
+    public void showAverage() {
+        System.out.println("\nThis text should be understood in average by " + average + " year olds.");
     }
 
     private int getCountWords() {
@@ -122,21 +166,16 @@ public class AnaliseText {
         return countVowel;
     }
 
-    private String getLevel(double value) {
+    public int getLevel(double value) {
         int score = (int) Math.ceil(value);
-        int start = (score >= 4) ? score + 5 : score + 4;
         int end = (score >= 3) ? score + 6 : score + 5;
-        if (score == 13) {
-            start = 18;
+        if (score >= 13) {
             end = 24;
         }
-        if (score == 14) {
-            return "This text should be understood by 24+ year olds.";
-        }
-        return "This text should be understood by "
-                + start
-                + "-"
-                + end
-                + " year olds.";
+        return end;
+    }
+
+    public String showLevel(double value) {
+        return "(about " + getLevel(value) + " year olds).";
     }
 }
