@@ -57,7 +57,7 @@ public class Analis {
     }
 
     private String getLevel() {
-        int score = (int) Math.round(this.score);
+        int score = (int) Math.ceil(this.score);
         int start = (score >= 4) ? score + 5 : score + 4;
         int end = (score >= 3) ? score + 6 : score + 5;
         if (score == 13) {
