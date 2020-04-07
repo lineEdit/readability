@@ -152,15 +152,18 @@ public class AnaliseText {
     private int getCountSyllablesInWord(String word) {
         int countVowel = 0;
         char[] symbols = word.toLowerCase().toCharArray();
+        boolean beforeNotVowel = true;
+        for (char symbol : symbols) {
+            if (isVowel(symbol) && beforeNotVowel) {
+                ++countVowel;
+                beforeNotVowel = false;
+            } else {
+                beforeNotVowel = true;
+            }
+
+        }
         if (symbols[symbols.length - 1] == 'e') {
             --countVowel;
-        } else if (isVowel(symbols[symbols.length - 1])) {
-            ++countVowel;
-        }
-        for (int i = 0; i < symbols.length - 1; ++i) {
-            if (isVowel(symbols[i]) && !isVowel(symbols[i + 1])) {
-                ++countVowel;
-            }
         }
         if (countVowel == 0) {
             countVowel = 1;
