@@ -13,6 +13,7 @@ public class AnaliseText {
     private int sentences;
     private int characters;
     private int syllables;
+    private int polysyllables;
 
     public AnaliseText(String fileName) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -34,6 +35,7 @@ public class AnaliseText {
         sentences = getCountSentences();
         characters = getCountCharacters();
         syllables = getCountSyllables();
+        polysyllables = getCountPolySyllables();
     }
 
     public void show() {
@@ -42,8 +44,8 @@ public class AnaliseText {
         System.out.println("Words: " + words);
         System.out.println("Sentences: " + sentences);
         System.out.println("Characters: " + characters);
-        System.out.println("The score is: " + getARI());
-//        System.out.println(getLevel());
+        System.out.println("Syllables: " + syllables);
+        System.out.println("Polysyllables: " + polysyllables);
     }
 
     private int getCountWords() {
@@ -66,6 +68,16 @@ public class AnaliseText {
         return 0.39 * ((float) words / sentences) + 11.8 * ((float) syllables / words) - 15.59;
     }
 
+    public double getSMOG() {
+        return 1.043 * Math.sqrt((float) polysyllables * 30 / sentences) + 3.1291;
+    }
+
+    public double getCLI() {
+        double letters = (float) characters / words * 100.0;
+        double sentences = (float) this.sentences / words * 100.0;
+        return 0.0588 * letters - 0.296 * sentences - 15.8;
+    }
+
     private boolean isVowel(char symbol) {
         return symbol == 'a'
                 || symbol == 'e'
@@ -79,6 +91,16 @@ public class AnaliseText {
         int count = 0;
         for (var item : listWords) {
             count += getCountSyllablesInWord(item);
+        }
+        return count;
+    }
+
+    private int getCountPolySyllables() {
+        int count = 0;
+        for (var item : listWords) {
+            if (getCountSyllablesInWord(item) > 2) {
+                ++count;
+            }
         }
         return count;
     }
