@@ -13,7 +13,6 @@ public class AnaliseText {
     private int sentences;
     private int characters;
     private int syllables;
-    private double scoreARI;
 
     public AnaliseText(String fileName) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -34,6 +33,7 @@ public class AnaliseText {
         words = getCountWords();
         sentences = getCountSentences();
         characters = getCountCharacters();
+        syllables = getCountSyllables();
     }
 
     public void show() {
@@ -42,8 +42,8 @@ public class AnaliseText {
         System.out.println("Words: " + words);
         System.out.println("Sentences: " + sentences);
         System.out.println("Characters: " + characters);
-        System.out.println("The score is: " + scoreARI);
-        System.out.println(getLevel());
+        System.out.println("The score is: " + getARI());
+//        System.out.println(getLevel());
     }
 
     private int getCountWords() {
@@ -76,7 +76,11 @@ public class AnaliseText {
     }
 
     private int getCountSyllables() {
-
+        int count = 0;
+        for (var item : listWords) {
+            count += getCountSyllablesInWord(item);
+        }
+        return count;
     }
 
     private int getCountSyllablesInWord(String word) {
@@ -96,8 +100,8 @@ public class AnaliseText {
         return countVowel;
     }
 
-    private String getLevel() {
-        int score = (int) Math.ceil(this.scoreARI);
+    private String getLevel(double value) {
+        int score = (int) Math.ceil(value);
         int start = (score >= 4) ? score + 5 : score + 4;
         int end = (score >= 3) ? score + 6 : score + 5;
         if (score == 13) {
