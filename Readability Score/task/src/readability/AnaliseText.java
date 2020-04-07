@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AnaliseText {
-    private String input;
-    private List<String> listWords;
+    final private String input;
+    final private List<String> listWords;
     private int words;
     private int sentences;
     private int characters;
@@ -64,21 +64,21 @@ public class AnaliseText {
         double score = getARI();
         System.out.println("Automated Readability Index: "
                 + score
-                + getLevel(score));
+                + showLevel(score));
     }
 
     public void showFK() {
         double score = getFK();
         System.out.println("Flesch–Kincaid readability tests: "
                 + score
-                + getLevel(score));
+                + showLevel(score));
     }
 
     public void showSMOG() {
         double score = getSMOG();
         System.out.println("Simple Measure of Gobbledygook: "
                 + score
-                + getLevel(score));
+                + showLevel(score));
     }
 
     public void showCLI() {
@@ -152,19 +152,15 @@ public class AnaliseText {
     private int getCountSyllablesInWord(String word) {
         int countVowel = 0;
         char[] symbols = word.toLowerCase().toCharArray();
-        for (int i = 0; i < symbols.length; ++i) {
-            if (isVowel(symbols[i])) {
-                if (i + 1 < symbols.length - 1) {
-                    if (!isVowel(symbols[i + 1])) {
-                        ++countVowel;
-                    } else {
-                        ++countVowel;
-                    }
-                }
-            }
-        }
         if (symbols[symbols.length - 1] == 'e') {
             --countVowel;
+        } else if (isVowel(symbols[symbols.length - 1])) {
+            ++countVowel;
+        }
+        for (int i = 0; i < symbols.length - 1; ++i) {
+            if (isVowel(symbols[i]) && !isVowel(symbols[i + 1])) {
+                ++countVowel;
+            }
         }
         if (countVowel == 0) {
             countVowel = 1;
