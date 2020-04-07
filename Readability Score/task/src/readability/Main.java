@@ -5,8 +5,7 @@ public class Main {
         if (args.length != 1) {
             return;
         }
-        Analis analis = new Analis(args[0]);
-        analis.calc();
-        analis.show();
+        AnaliseText analiseText = new AnaliseText(args[0]);
+        analiseText.show();
     }
 }
